@@ -59,4 +59,11 @@ Route::get('/issues', function (Request $request) {
 
     return new IssuesCollection(Issue::where('dept_id', $dept_id)->get());
 });
+Route::post('/issues', function (Request $request) {
+    $dept_id = $request->dept_id;
+    // $issue_data = Issue::where("dept_id", $dept_id)->get();
+    // return response()->json(["data" => $issue_data]);
+
+    return new IssuesCollection(Issue::where('dept_id', $dept_id)->get());
+});
 Route::middleware('auth:sanctum')->post("/create_complaint", [ComplaintController::class, "store"]);
