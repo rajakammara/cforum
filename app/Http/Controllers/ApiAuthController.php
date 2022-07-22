@@ -38,6 +38,10 @@ class ApiAuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'username'=>$request->name,
+            'email'=>$request->email,
+            'mobile_no'=>$request->mobile_no,
+            'id'=>$user->id,
         ]);
     }
 }
