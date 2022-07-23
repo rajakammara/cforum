@@ -41,7 +41,7 @@ class ComplaintController extends Controller
             "dept_id" => "required",
             "issue_id" => "required",
             "user_remarks" => "required",
-            "photo" => "required|image|max:1000",
+            //"photo" => "required|image|max:1000",
 
         ], [
 
@@ -49,7 +49,7 @@ class ComplaintController extends Controller
             "dept_id.required" => "Please Insert Deptid",
             "issue_id.required" => "Please Insert Issueid",
             "user_remarks.required" => "Please Insert User Remarks",
-            "photo.required" => "Please Insert Photo",
+            //"photo.required" => "Please Insert Photo",
         ]);
 
         if ($request->hasFile("photo")) {
