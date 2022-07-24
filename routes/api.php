@@ -4,12 +4,14 @@ use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Resources\DeptCollection;
 use App\Http\Resources\IssuesCollection;
+use App\Http\Resources\ComplaintCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Issue;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\Complaint;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -65,5 +67,10 @@ Route::post('/issues', function (Request $request) {
     // return response()->json(["data" => $issue_data]);
 
     return new IssuesCollection(Issue::where('dept_id', $dept_id)->get());
+});
+Route::post("/getusercomplaints", function (Request $request) {
+    //$complaint = Complaint::where("user_id",$id);
+    $user_id = $request->userid;
+    return new ComplaintCollection(Complaint::where('user_id', $user_id)->get());
 });
 Route::middleware('auth:sanctum')->post("/create_complaint", [ComplaintController::class, "store"]);
