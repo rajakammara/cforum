@@ -46,6 +46,34 @@ Route::post('/sanctum/token', function (Request $request) {
         'token_type' => 'Bearer',
     ]);
 });
+Route::post('/login', function (Request $request) {
+    $request->validate([
+        'mobile_no' => 'required',
+        'password' => 'required',        
+    ]);
+
+    $user = User::where('mobile_no', $request->mobile_no)->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'mobile_no' => ['The provided credentials are incorrect.'],
+        ]);
+    }
+
+    $token = $user->createToken("mobile")->plainTextToken;
+
+    return response()->json([
+        'access_token' => $token,
+        'token_type' => 'Bearer',
+        'user_type' => $user->role,
+        'user_id'=>$user->id,
+        'user_name'=>$user->name,
+        'mobile_no'=>$user->mobile_no,
+        'email'=>$user->email,
+    ]);
+});
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
