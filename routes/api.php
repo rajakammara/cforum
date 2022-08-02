@@ -101,4 +101,10 @@ Route::post("/getusercomplaints", function (Request $request) {
     $user_id = $request->userid;
     return new ComplaintCollection(Complaint::where('user_id', $user_id)->get());
 });
+
+Route::post("/getallcomplaints", function (Request $request) {
+    //$complaint = Complaint::where("user_id",$id);
+    $user_id = $request->userid;
+    return new ComplaintCollection(Complaint::all());
+});
 Route::middleware('auth:sanctum')->post("/create_complaint", [ComplaintController::class, "store"]);
