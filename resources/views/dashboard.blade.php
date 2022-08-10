@@ -2,14 +2,18 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
+
         </h2>
     </x-slot>
 
     <div class="py-12">
+
+
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow shadow-sm sm:rounded-lg overflow-scroll">
                 <div class="p-6 bg-white border-b border-gray-200 break-words">
-                    @can('isAdmin')
+                    @canany(['isMasterAdmin', 'isLocalAdmin', 'isDistUser', 'isDivUser'])
 
                         {{-- You have Admin Access --}}
                         <div class="">
@@ -18,9 +22,10 @@
                                     class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th scope="col" class="py-3 px-6 border">Sl.No.</th>
-                                        <th scope="col" class="py-3 px-6 border">Userid</th>
-                                        <th scope="col" class="py-3 px-6 border">Deptid</th>
-                                        <th scope="col" class="py-3 px-6 border">Issueid</th>
+                                        <th scope="col" class="py-3 px-6 border">ComplaintID</th>
+                                        <th scope="col" class="py-3 px-6 border">User</th>
+                                        <th scope="col" class="py-3 px-6 border">Dept</th>
+                                        <th scope="col" class="py-3 px-6 border">Issue</th>
                                         <th scope="col" class="py-3 px-6 border">User Remarks</th>
                                         <th scope="col" class="py-3 px-6 border">Complaint Status</th>
                                         <th scope="col" class="py-3 px-6 border">Image</th>
@@ -30,6 +35,10 @@
                                     @forelse ($complaints as $complaint)
                                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                             <td class="py-4 px-6 border">{{ $loop->iteration }}</td>
+                                            <td class="py-4 px-6 border">
+                                                <a class="text-blue-500 underline font-semibold"
+                                                    href="{{ route('complaints.show', $complaint->id) }}">{{ $complaint->complaint_id }}</a>
+                                            </td>
                                             <td class="py-4 px-6 border">{{ $complaint->username->name }}</td>
                                             <td class="py-4 px-6 border">
                                                 {{ $complaint->departmentname->department_name }}
@@ -55,11 +64,9 @@
                             </table>
                         </div>
                         {{ $complaints->links() }}
-                    @elsecan('isManager')
-                        <div class="btn btn-primary btn-lg">
-                            You have Manager Access
-                        </div>
-                    @else
+                    @endcanany
+
+                    @can('isUser')
                         <div class="btn btn-info btn-lg">
                             You have User Access
                         </div>

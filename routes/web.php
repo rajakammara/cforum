@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\IssueController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +22,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    $complaints = \App\Models\Complaint::paginate();
-    return view('dashboard', compact('complaints'));
-})->middleware(['auth'])->name('dashboard');
+// Protected Routes
+Route::middleware(['auth', 'auth:sanctum'])->group(
+    function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('issues', IssueController::class);
+        Route::resource('users', UserController::class);
+        Route::resource('complaints', ComplaintController::class);
+
+        // Fetch divisions
+        Route::post('fetchdivisions', [DivisionController::class, 'fetchDivisions']);
+    }
+);
 
 require __DIR__ . '/auth.php';

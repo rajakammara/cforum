@@ -20,8 +20,13 @@ class CreateComplaintsTable extends Migration
             $table->foreignId("issue_id")->constrained("issues");
             $table->string("user_remarks");
             $table->string("photo");
-            $table->string("complaint_status");
-            $table->string("user_feedback");
+            $table->enum('complaint_status',  ['Pending', 'Forwarded', 'Resolved', 'Closed'])->default('Pending');
+            $table->string('actiontaken_remarks')->nullable();
+            $table->string('actiontaken_report')->nullable();
+            $table->foreignId("dept_user_id")->nullable()->constrained("users");
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string("user_feedback")->nullable();
             $table->timestamps();
         });
     }

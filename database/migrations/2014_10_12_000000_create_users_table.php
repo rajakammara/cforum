@@ -20,6 +20,10 @@ class CreateUsersTable extends Migration
             $table->string('mobile_no')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('district')->default("Anantapuramu");
+            $table->string('mandal')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
