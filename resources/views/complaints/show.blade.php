@@ -147,10 +147,10 @@
                         $("#action_taken_report").prop('required', false);
                         $("#division_id").html('');
                         $.ajax({
-                            url: "{{ url('/fetchdivisions') }}",
+                            url: "{{ url('/fetchuserdivisions') }}",
                             type: "POST",
                             data: {
-                                id: dept_id,
+                                dept_id: dept_id,
                                 _token: '{{ csrf_token() }}'
                             },
                             dataType: 'json',

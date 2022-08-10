@@ -32,8 +32,10 @@ Route::middleware(['auth', 'auth:sanctum'])->group(
         Route::resource('users', UserController::class);
         Route::resource('complaints', ComplaintController::class);
 
-        // Fetch divisions
+        // Fetch all divisions
         Route::post('fetchdivisions', [DivisionController::class, 'fetchDivisions']);
+        // Fetch user divisions
+        Route::post('fetchuserdivisions', [DivisionController::class, 'fetch_user_Divisions']);
     }
 );
 

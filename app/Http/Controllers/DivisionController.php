@@ -83,11 +83,18 @@ class DivisionController extends Controller
         //
     }
 
-    public function fetchDivisions(Request $request)
+    public function fetch_user_Divisions(Request $request)
     {
         //$data['divisions'] = Division::where('dept_id', '=', $request->id)->get();
-
-        $data['divisions'] = Division::join('users', 'divisions.id', '=', 'users.division_id')->get(['divisions.*']);
+        $dept_id = $request->get('dept_id');
+        $data['divisions'] = Division::join('users', 'divisions.id', '=', 'users.division_id')->where('divisions.dept_id', '=', $dept_id)->get(['divisions.*']);
+        return response()->json($data);
+    }
+    public function fetchDivisions(Request $request)
+    {
+        $data['divisions'] = Division::where('dept_id', '=', $request->dept_id)->get();
+        // $dept_id = $request->get('dept_id');
+        // $data['divisions'] = Division::join('users', 'divisions.id', '=', 'users.division_id')->where('divisions.dept_id', '=', $dept_id)->get(['divisions.*']);
         return response()->json($data);
     }
 }

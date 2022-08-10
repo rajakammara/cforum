@@ -38,18 +38,18 @@
                                     Please fill New User Details</label>
                                 <div class="mt-1">
                                     <input id="username" name="username" type="text"
-                                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
+                                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
                                         required placeholder="Please Enter User Name" value="{{ old('username') }}" />
 
                                     <input id="email" name="email" type="email"
-                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
+                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
                                         required placeholder="Please Enter User Email" value="{{ old('email') }}" />
                                     <input id="mobile_no" name="mobile_no" type="number"
-                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
+                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
                                         required placeholder="Please Enter Mobile Number" value="{{ old('mobile_no') }}" />
 
                                     <Select id="department_id" name="department_id" type="text"
-                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
+                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
                                         required>
                                         <Option value="">Please Select Department</Option>
                                         @foreach ($departments as $department)
@@ -59,9 +59,9 @@
                                     </Select>
 
                                     <Select id="division_id" name="division_id" type="text"
-                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
+                                        class="mt-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
                                         required>
-                                        <Option value="">Please Select Division</Option>
+
 
                                     </Select>
 
@@ -98,13 +98,15 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#department_id').on('change', function() {
+                    $("#division_id").empty().append('<option value="">Select Division</option>');
+
                     var dept_id = this.value;
-                    $("#division_id").html('');
+                    //console.log(dept_id)
                     $.ajax({
                         url: "{{ url('/fetchdivisions') }}",
                         type: "POST",
                         data: {
-                            id: dept_id,
+                            dept_id: dept_id,
                             _token: '{{ csrf_token() }}'
                         },
                         dataType: 'json',
