@@ -71,14 +71,9 @@ Route::post('/login', function (Request $request) {
     $dept_id = $user->dept_id;
     $division_id = $user->division_id;
     $role = $user->role;
-    if (isNull($dept_id)  ) {
-        $dept_id = 0;
-        
-        //$role = "user";
-    }
-    if(isNull($division_id)){
-    $division_id = 0;
-    }
+    $dept_id = isNull($user->dept_id)?0:$user->dept_id;
+    $division_id = isNull($user->division_id)?0:$user->division_id;
+    
     return response()->json([
         'status' => "ok",
         'access_token' => $token,
