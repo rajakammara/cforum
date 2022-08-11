@@ -128,7 +128,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Get All complaints by department id
     Route::post("/getdeptcomplaints", function (Request $request) {
         $dept_id = $request->deptid;
-        return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->get());
+        return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('complaint_status',"=","Pending")->get());
     });
 
     // Get all complaints by user id
