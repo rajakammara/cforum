@@ -71,10 +71,13 @@ Route::post('/login', function (Request $request) {
     $dept_id = $user->dept_id;
     $division_id = $user->division_id;
     $role = $user->role;
-    if (isNull($dept_id) || isNull($division_id)) {
+    if (isNull($dept_id)  ) {
         $dept_id = 0;
-        $division_id = 0;
+        
         //$role = "user";
+    }
+    if(isNull($division_id)){
+    $division_id = 0;
     }
     return response()->json([
         'status' => "ok",
