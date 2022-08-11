@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use \App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+use function PHPUnit\Framework\isNull;
+
 class ApiAuthController extends Controller
 {
     public function register(Request $request)
@@ -36,9 +38,17 @@ class ApiAuthController extends Controller
             'password' => Hash::make($request->password),
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+            'role' => 'user'
         ]);
         $token = $user->createToken('auth_token')->plainTextToken;
-
+        $dept_id = $user->dept_id;
+        $division_id = $user->division_id;
+        $role = $user->role;
+        if (isNull($dept_id) || isNull($division_id) || isNull($role)) {
+            $dept_id = 0;
+            $division_id = 0;
+            $role = "user";
+        }
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
@@ -46,9 +56,9 @@ class ApiAuthController extends Controller
             'email' => $request->email,
             'mobile_no' => $request->mobile_no,
             'id' => $user->id,
-            'role' => $user->role,
-            'dept_id' => $user->dept_id,
-            'division_id' => $user->division_id,
+            'role' => $role,
+            'dept_id' => $dept_id,
+            'division_id' => $division_id,
             'latitude' => $user->latitude,
             'longitude' => $user->longitude,
         ]);

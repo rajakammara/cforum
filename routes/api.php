@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\Complaint;
+use function PHPUnit\Framework\isNull;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,11 +68,19 @@ Route::post('/login', function (Request $request) {
 
     $token = $user->createToken("mobile")->plainTextToken;
 
+    $dept_id = $user->dept_id;
+    $division_id = $user->division_id;
+    $role = $user->role;
+    if (isNull($dept_id) || isNull($division_id) || isNull($role)) {
+        $dept_id = 0;
+        $division_id = 0;
+        $role = "user";
+    }
     return response()->json([
         'status' => "ok",
         'access_token' => $token,
         'token_type' => 'Bearer',
-        'role' => $user->role,
+        'role' => $role,
         'user_id' => $user->id,
         'user_name' => $user->name,
         'mobile_no' => $user->mobile_no,
@@ -79,8 +88,8 @@ Route::post('/login', function (Request $request) {
         'can_forward_issue' => $user->can_forward_issue,
         'can_close_issue' => $user->can_close_issue,
         'is_deptuser' => $user->is_deptuser,
-        'dept_id' => $user->dept_id,
-        'division_id' => $user->division_id,
+        'dept_id' => $dept_id,
+        'division_id' => $division_id,
         'mandal' => $user->mandal,
         'latitude' => $user->latitude,
         'longitude' => $user->longitude,
