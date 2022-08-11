@@ -71,7 +71,7 @@ Route::post('/login', function (Request $request) {
         'status' => "ok",
         'access_token' => $token,
         'token_type' => 'Bearer',
-        'user_type' => $user->role,
+        'role' => $user->role,
         'user_id' => $user->id,
         'user_name' => $user->name,
         'mobile_no' => $user->mobile_no,

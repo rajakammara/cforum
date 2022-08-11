@@ -16,11 +16,13 @@ class ApiAuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|min:8',
-            'mobile_no' => 'required|max:10|min:10'
+            'mobile_no' => 'required|max:10|min:10',
+
         ]);
         // Return errors if validation error occur.
         if ($validator->fails()) {
             $errors = $validator->errors();
+
             return response()->json([
                 'error' => $errors
             ], 400);
@@ -31,17 +33,22 @@ class ApiAuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'mobile_no' => $request->mobile_no,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
         ]);
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'username'=>$request->name,
-            'email'=>$request->email,
-            'mobile_no'=>$request->mobile_no,
-            'id'=>$user->id,
+            'username' => $request->name,
+            'email' => $request->email,
+            'mobile_no' => $request->mobile_no,
+            'id' => $user->id,
+            'role' => $user->role,
+            'dept_id' => $user->dept_id,
+            'division_id' => $user->division_id,
         ]);
     }
 }
