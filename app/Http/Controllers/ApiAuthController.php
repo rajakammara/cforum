@@ -49,6 +49,8 @@ class ApiAuthController extends Controller
             'role' => $user->role,
             'dept_id' => $user->dept_id,
             'division_id' => $user->division_id,
+            'latitude' => $user->latitude,
+            'longitude' => $user->longitude,
         ]);
     }
 }
