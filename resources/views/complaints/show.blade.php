@@ -6,7 +6,7 @@
                 'Showing Complaint id / ' .
                     $complaint->complaint_id .
                     ' / ' .
-                    $complaint->departmentname->department_name .
+                    $complaint->department->department_name .
                     ' Department' .
                     ' / ' .
                     ' Status : ' .
@@ -50,7 +50,7 @@
                                 <div class="mt-1">
                                     <textarea id="issue_details" name="issue_details" rows="3"
                                         class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
-                                        required readonly>{{ $complaint->issuename->issue_details }}</textarea>
+                                        required readonly>{{ $complaint->issue->issue_details }}</textarea>
                                 </div>
                                 <label for="issue_details"
                                     class="block mt-2 mb-2 text-sm font-bold text-gray-900 dark:text-gray-300">
@@ -67,7 +67,7 @@
                                 <div class="mt-1">
                                     <textarea id="complaint_raisedby" name="complaint_raisedby" rows="1"
                                         class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-semibold"
-                                        required readonly>{{ $complaint->username->name . ' / ' . $complaint->username->mobile_no . ' / ' . $complaint->username->mandal }}</textarea>
+                                        required readonly>{{ $complaint->user->name . ' / ' . $complaint->user->mobile_no . ' / ' . $complaint->user->mandal }}</textarea>
                                 </div>
                                 <label for="captured_media"
                                     class="block mt-2 mb-2 text-sm font-bold text-gray-900 dark:text-gray-300">

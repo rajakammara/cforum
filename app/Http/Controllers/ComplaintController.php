@@ -18,6 +18,20 @@ class ComplaintController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        // Load all complaints when auth user don't have dept id value
+        if ($user->role == 'local_admin' || $user->role == 'master_admin') {
+            $complaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Pending')->paginate();
+            return view('complaints.index', compact('complaints'));
+        } else if ($user->role == "dist_user") {
+            // Load all complaints when auth user have dept id value
+            $complaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('complaint_status', '=', 'Pending')->paginate();
+            return view('complaints.index', compact('complaints'));
+        } else if ($user->role == "div_user") {
+            // Load all complaints when auth user have dept id value and division
+            $complaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Pending')->orWhere('complaint_status', '=', 'Forwarded')->paginate();
+            return view('complaints.index', compact('complaints'));
+        }
     }
 
     /**

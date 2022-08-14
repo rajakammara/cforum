@@ -63,4 +63,76 @@ class ApiAuthController extends Controller
             'longitude' => $user->longitude,
         ]);
     }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'mobile_no' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('mobile_no', $request->mobile_no)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            // throw ValidationException::withMessages([
+            //     'mobile_no' => ['The provided credentials are incorrect.'],
+            // ]);
+            return response()->json([
+                'status' => "error",
+                'message' => 'Invalid Credentials'
+            ]);
+        }
+
+        $token = $user->createToken("mobile")->plainTextToken;
+
+        $dept_id = $user->dept_id;
+        $division_id = $user->division_id;
+        $role = $user->role;
+        $dept_id = $user->dept_id == null ? 0 : $user->dept_id;
+        $division_id = $user->division_id == null ? 0 : $user->division_id;
+
+        return response()->json([
+            'status' => "ok",
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'role' => $role,
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'mobile_no' => $user->mobile_no,
+            'email' => $user->email,
+            'can_forward_issue' => $user->can_forward_issue,
+            'can_close_issue' => $user->can_close_issue,
+            'is_deptuser' => $user->is_deptuser,
+            'dept_id' => $dept_id,
+            'division_id' => $division_id,
+            'mandal' => $user->mandal,
+            'latitude' => $user->latitude,
+            'longitude' => $user->longitude,
+        ]);
+    }
+
+    public function sanctumToken(Request $request)
+    {
+        $request->validate([
+            'mobile_no' => 'required',
+            'password' => 'required',
+            'device_name' => 'required',
+        ]);
+
+        $user = User::where('mobile_no', $request->mobile_no)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => "error",
+                'message' => 'Invalid Credentials'
+            ]);
+        }
+
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
+    }
 }

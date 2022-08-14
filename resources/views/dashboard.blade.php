@@ -14,56 +14,132 @@
             <div class="bg-white overflow shadow-sm sm:rounded-lg overflow-scroll">
                 <div class="p-6 bg-white border-b border-gray-200 break-words">
                     @canany(['isMasterAdmin', 'isLocalAdmin', 'isDistUser', 'isDivUser'])
-
                         {{-- You have Admin Access --}}
-                        <div class="">
-                            <table class="table-auto ">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="py-3 px-6 border">Sl.No.</th>
-                                        <th scope="col" class="py-3 px-6 border">ComplaintID</th>
-                                        <th scope="col" class="py-3 px-6 border">User</th>
-                                        <th scope="col" class="py-3 px-6 border">Dept</th>
-                                        <th scope="col" class="py-3 px-6 border">Issue</th>
-                                        <th scope="col" class="py-3 px-6 border">User Remarks</th>
-                                        <th scope="col" class="py-3 px-6 border">Complaint Status</th>
-                                        <th scope="col" class="py-3 px-6 border">Image</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($complaints as $complaint)
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <td class="py-4 px-6 border">{{ $loop->iteration }}</td>
-                                            <td class="py-4 px-6 border">
-                                                <a class="text-blue-500 underline font-semibold"
-                                                    href="{{ route('complaints.show', $complaint->id) }}">{{ $complaint->complaint_id }}</a>
-                                            </td>
-                                            <td class="py-4 px-6 border">{{ $complaint->username->name }}</td>
-                                            <td class="py-4 px-6 border">
-                                                {{ $complaint->departmentname->department_name }}
-                                            </td>
-                                            <td class="py-4 px-6 border">{{ $complaint->issuename->issue_details }}</td>
-                                            <td class="py-4 px-6 border break-all">{{ $complaint->user_remarks }}</td>
-                                            <td class="py-4 px-6 border">{{ $complaint->complaint_status }}</td>
-                                            {{-- <td class="py-4 px-6 border">{{ $complaint->photo }}</td> --}}
-                                            <td class="py-4 px-6 border">
-                                                <a href="{{ asset('storage/images/complaints/') . '/' . $complaint->photo }}"
-                                                    target="__blank"><img class="object-fit h-10 w-10"
-                                                        src="{{ asset('storage/images/complaints/') . '/' . $complaint->photo }}">
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7">No Records to Display</td>
 
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+
+
+                        <div class="flex flex-wrap mb-2">
+                            {{-- Total Complaints --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-yellow-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Total Complaints</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['totalComplaints'] }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Pending Complaints --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-red-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Pending Complaints</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['pendingComplaints'] }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Forwarded Complaints --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-orange-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Forwarded Complaints</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['forwardedComplaints'] }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Closed Complaints --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-green-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Closed Complaints</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['closedComplaints'] }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Total Departments --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-blue-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Total Departments</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['totalDepartments'] }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Total Issues --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-emerald-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Total Predefined Issues</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['totalIssues'] }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {{-- Total Dept Users --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-gray-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Total Department Users</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['totalDeptUsers'] }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- Total Users --}}
+                            <div class="w-full md:w-1/4 xl:w-1/4 pt-3 px-3 md:pr-2">
+                                <div class="bg-indigo-600 border rounded shadow p-2">
+                                    <div class="flex flex-row items-center">
+                                        <div class="flex-shrink pl-1 pr-4"><i
+                                                class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
+                                        <div class="flex-1 text-right">
+                                            <h5 class="text-white">Total App Users</h5>
+                                            <h3 class="text-white text-3xl">{{ $dashboard_stats['totalUsers'] }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
-                        {{ $complaints->links() }}
                     @endcanany
 
                     @can('isUser')

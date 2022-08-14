@@ -11,17 +11,17 @@ class Complaint extends Model
 
     protected $guarded = [];
     protected $appends = ['complaint_id'];
-    public function username()
+    public function user()
     {
         return $this->hasOne(User::class, "id", "user_id");
     }
 
-    public function departmentname()
+    public function department()
     {
         return $this->hasOne(Department::class, "id", "dept_id");
     }
 
-    public function issuename()
+    public function issue()
     {
         return $this->hasOne(Issue::class, "id", "issue_id");
     }

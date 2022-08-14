@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('role', '!=', 'master_admin')->paginate();
+        $users = User::with('department')->where('role', '!=', 'master_admin')->paginate();
         return view('users.index', compact('users'));
     }
 
@@ -108,5 +108,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function resetUser($id)
+    {
+        $user = User::find($id);
+
+        $user->password = Hash::make('12345678');
+
+        $user->save();
     }
 }

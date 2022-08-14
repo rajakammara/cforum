@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
+use App\Models\Issue;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,16 +20,79 @@ class DashboardController extends Controller
         $user = Auth::user();
         // Load all complaints when auth user don't have dept id value
         if ($user->role == 'local_admin' || $user->role == 'master_admin') {
-            $complaints = \App\Models\Complaint::where('complaint_status', '=', 'Pending')->paginate();
-            return view('dashboard', compact('complaints'));
+
+            $totalComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->count('id');
+            $pendingComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Pending')->count('id');
+            $forwardedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Forwarded')->count('id');
+            $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Resolved')->count('id');
+            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Closed')->count('id');
+
+            $departments = Department::count();
+            $totalDeptUsers = User::where('role', '=', 'dist_user')->orWhere('role', '=', 'div_user')->count();
+            $totalUsers = User::where('role', '=', 'user')->count();
+
+            $totalIssues = Issue::count();
+
+            $dashboard_stats = [
+                'totalComplaints' => $totalComplaints,
+                'pendingComplaints' => $pendingComplaints,
+                'forwardedComplaints' => $forwardedComplaints,
+                'closedComplaints' => $closedComplaints,
+                'totalDepartments' => $departments,
+                'totalUsers' => $totalUsers,
+                'totalDeptUsers' => $totalDeptUsers,
+                'totalIssues' => $totalIssues,
+            ];
+            return view('dashboard', compact('dashboard_stats'));
         } else if ($user->role == "dist_user") {
-            // Load all complaints when auth user have dept id value
-            $complaints = \App\Models\Complaint::where('dept_id', '=', $user->dept_id)->where('complaint_status', '=', 'Pending')->orWhere('complaint_status', '=', 'Forwarded')->paginate();
-            return view('dashboard', compact('complaints'));
+
+            $totalComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->count('id');
+            $pendingComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('complaint_status', '=', 'Pending')->count('id');
+            $forwardedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('complaint_status', '=', 'Forwarded')->count('id');
+            $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Resolved')->where('dept_id', '=', $user->dept_id)->count('id');
+            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->count('id');
+
+            $departments = Department::where('id', '=', $user->dept_id)->count();
+            $totalDeptUsers = User::where('role', '=', 'dist_user')->where('dept_id', '=', $user->dept_id)->orWhere('role', '=', 'div_user')->count();
+            $totalUsers = User::where('role', '=', 'user')->count();
+
+            $totalIssues = Issue::where('dept_id', '=', $user->dept_id)->count();
+
+            $dashboard_stats = [
+                'totalComplaints' => $totalComplaints,
+                'pendingComplaints' => $pendingComplaints,
+                'forwardedComplaints' => $forwardedComplaints,
+                'closedComplaints' => $closedComplaints,
+                'totalDepartments' => $departments,
+                'totalUsers' => $totalUsers,
+                'totalDeptUsers' => $totalDeptUsers,
+                'totalIssues' => $totalIssues,
+            ];
+            return view('dashboard', compact('dashboard_stats'));
         } else if ($user->role == "div_user") {
-            // Load all complaints when auth user have dept id value and division
-            $complaints = \App\Models\Complaint::where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Pending')->orWhere('complaint_status', '=', 'Forwarded')->paginate();
-            return view('dashboard', compact('complaints'));
+            $totalComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->count('id');
+            $pendingComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Pending')->count('id');
+            $forwardedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Forwarded')->count('id');
+            $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Resolved')->where('division_id', '=', $user->division_id)->where('dept_id', '=', $user->dept_id)->count('id');
+            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->count('id');
+
+            $departments = Department::where('id', '=', $user->dept_id)->count();
+            $totalDeptUsers = User::where('role', '=', 'dist_user')->where('dept_id', '=', $user->dept_id)->orWhere('role', '=', 'div_user')->count();
+            $totalUsers = User::where('role', '=', 'user')->count();
+
+            $totalIssues = Issue::where('dept_id', '=', $user->dept_id)->count();
+
+            $dashboard_stats = [
+                'totalComplaints' => $totalComplaints,
+                'pendingComplaints' => $pendingComplaints,
+                'forwardedComplaints' => $forwardedComplaints,
+                'closedComplaints' => $closedComplaints,
+                'totalDepartments' => $departments,
+                'totalUsers' => $totalUsers,
+                'totalDeptUsers' => $totalDeptUsers,
+                'totalIssues' => $totalIssues,
+            ];
+            return view('dashboard', compact('dashboard_stats'));
         }
     }
 

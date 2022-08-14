@@ -15,12 +15,18 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('complaints.index')" :active="request()->routeIs('complaints.index')">
+                        {{ __('Complaints') }}
+                    </x-nav-link>
                     @canany(['isMasterAdmin', 'isLocalAdmin'])
                         <x-nav-link :href="route('issues.index')" :active="request()->routeIs('issues.index')">
                             {{ __('Issues') }}
                         </x-nav-link>
                         <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                             {{ __('Users') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.index')">
+                            {{ __('Reports') }}
                         </x-nav-link>
                     @endcanany
                 </div>
