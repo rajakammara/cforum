@@ -17,15 +17,15 @@ class ReportController extends Controller
     {
 
         $abstractQuery = "Select a.id,a.department_name,sum(totalcomplaints) as 'totalcomplaints',sum(pendingcomplaints) as 'pendingcomplaints',sum(forwardedcomplaints) as 'forwardedcomplaints', sum(resolvedcomplaints) as 'resolvedcomplaints', sum(closedcomplaints) as 'closedcomplaints' from (
-        SELECT d.id,d.department_name,sum(i.id) as 'totalcomplaints',0 as 'pendingcomplaints',0 as 'forwardedcomplaints',0 as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id GROUP by d.department_name,d.id
+        SELECT d.id,d.department_name,count(i.id) as 'totalcomplaints',0 as 'pendingcomplaints',0 as 'forwardedcomplaints',0 as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id GROUP by d.department_name,d.id
         union ALL
-        SELECT d.id,d.department_name,0 as 'totalcomplaints',sum(i.id) as 'pendingcomplaints',0 as 'forwardedcomplaints',0 as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Pending' GROUP by d.department_name,d.id
+        SELECT d.id,d.department_name,0 as 'totalcomplaints',count(i.id) as 'pendingcomplaints',0 as 'forwardedcomplaints',0 as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Pending' GROUP by d.department_name,d.id
         union ALL
-        SELECT d.id, d.department_name,0 as 'totalcomplaints',0 as 'pendingcomplaints',sum(i.id) as 'forwardedcomplaints',0 as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Forwarded' GROUP by d.department_name,d.id
+        SELECT d.id, d.department_name,0 as 'totalcomplaints',0 as 'pendingcomplaints',count(i.id) as 'forwardedcomplaints',0 as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Forwarded' GROUP by d.department_name,d.id
         union ALL
-        SELECT d.id,d.department_name,0 as 'totalcomplaints',0 as 'pendingcomplaints',0 as 'forwardedcomplaints',sum(i.id) as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Resolved' GROUP by d.department_name,d.id
+        SELECT d.id,d.department_name,0 as 'totalcomplaints',0 as 'pendingcomplaints',0 as 'forwardedcomplaints',count(i.id) as 'resolvedcomplaints',0 as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Resolved' GROUP by d.department_name,d.id
         union ALL
-        SELECT d.id,d.department_name,0 as 'totalcomplaints',0 as 'pendingcomplaints',0 as 'forwardedcomplaints',0 as 'resolvedcomplaints',sum(i.id) as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Closed' GROUP by d.department_name,d.id
+        SELECT d.id,d.department_name,0 as 'totalcomplaints',0 as 'pendingcomplaints',0 as 'forwardedcomplaints',0 as 'resolvedcomplaints',count(i.id) as 'closedcomplaints' FROM `complaints` c inner join departments d on c.dept_id=d.id inner join issues i on c.issue_id=i.id where c.complaint_status='Closed' GROUP by d.department_name,d.id
         ) a group by a.id,a.department_name order by a.department_name";
 
         $abstractComplaints = DB::select($abstractQuery);
