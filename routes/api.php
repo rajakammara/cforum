@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     // Fetch divisions
-    Route::post('fetchdivisions', [DivisionController::class, 'fetchDivisions']);
+    Route::post('fetchDivisions', [DivisionController::class, 'fetchDivisions']);
     // Fetch user divisions
-    Route::post('fetchuserdivisions', [DivisionController::class, 'fetch_user_Divisions']);
+    Route::post('fetchUserDivisions', [DivisionController::class, 'fetch_user_Divisions']);
 });

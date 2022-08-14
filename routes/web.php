@@ -44,6 +44,11 @@ Route::middleware(['auth', 'auth:sanctum'])->group(
         Route::post('fetchdivisions', [DivisionController::class, 'fetchDivisions']);
         // Fetch user divisions
         Route::post('fetchuserdivisions', [DivisionController::class, 'fetch_user_Divisions']);
+
+
+        //Change Password
+        Route::get('/change-password', [UserController::class, 'getChangePassword'])->name('users.getChangePassword');
+        Route::post('/change-password', [UserController::class, 'postChangePassword'])->name('users.postChangePassword');
     }
 );
 
