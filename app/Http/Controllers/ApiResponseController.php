@@ -8,8 +8,10 @@ use App\Models\Issue;
 use Illuminate\Http\Request;
 use App\Http\Resources\ComplaintCollection;
 use App\Models\Complaint;
+use App\Models\ComplaintTracking;
 use App\Models\Department;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class ApiResponseController extends Controller
 {
@@ -54,6 +56,15 @@ class ApiResponseController extends Controller
     {
         $user_id = $request->userid;
         return new ComplaintCollection(Complaint::where('user_id', $user_id)->get());
+    }
+
+    //Get All Complaint Details by  Id
+    public function getComplaint(Request $request)
+    {
+        $complaint_id = $request->cid;
+        $complaint = DB::select("select c.*,i.issue_details,u.name,u.mobile_no,u.email,d.department_name from complaints c inner join issues i on c.issue_id=i.id inner join users u on c.user_id=u.id inner join departments d on c.dept_id = d.id where c.id = ?", [$complaint_id]);
+        return response()->json(["data" => $complaint]);
+        //return new ComplaintCollection(Complaint::where('id', $complaint_id)->get());
     }
 
     //Get Dashboard stats
@@ -137,6 +148,70 @@ class ApiResponseController extends Controller
                 'totalIssues' => $totalIssues,
             ];
             return response()->json(["data" => $dashboard_stats]);
+        }
+    }
+
+    public function updateComplaint(Request $request)
+    {
+        $complaint = Complaint::find($request->complaint_id);
+        $dept_user_id = $request->dept_user_id;
+        if ($request->get('complaint_status') == 'Forwarded') {
+            $this->validate($request, [
+                'action_taken_remarks' => 'required',
+                'complaint_status' => 'required',
+                'division_id' => 'required',
+            ]);
+
+            $divisionuser = User::where('dept_id', '=', $complaint->dept_id)->where('division_id', '=', $request->get('division_id'))->first();
+
+            $complaint->actiontaken_remarks = $request->get('action_taken_remarks');
+            $complaint->complaint_status = $request->get('complaint_status');
+            $complaint->division_id = $request->get('division_id');
+            $complaint->dept_user_id = $dept_user_id;
+            $complaint->save();
+
+            $complaint_tracking = ComplaintTracking::create([
+                'complaint_id' => $complaint->id,
+                'dept_user_id' => $dept_user_id,
+                'dept_id' => $complaint->dept_id,
+                'division_id' => $request->get('division_id'),
+                'dept_remarks' => $request->get('action_taken_remarks'),
+                'complaint_status' => $complaint->complaint_status,
+                'custom_complaint_id' => $complaint->complaint_id,
+            ]);
+
+
+
+            return response()->json(['success', 'Complaint Status Updated Successfully']);
+        } else {
+            $this->validate($request, [
+                'action_taken_remarks' => 'required',
+                'complaint_status' => 'required',
+                'action_taken_report' => 'required|file|max:2000|mimes:pdf,jpg,png,jpeg,doc,gif',
+            ]);
+
+            if ($request->hasFile("action_taken_report")) {
+                // Get filename with the extension
+                $filenameWithExt = $request->file('action_taken_report')->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('action_taken_report')->getClientOriginalExtension();
+                // Filename to store
+                $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+                // Upload Image
+                $path = $request->file('action_taken_report')->storeAs('public/reports/complaints', $fileNameToStore);
+            } else {
+                //$fileNameToStore = "Testing.jpg";
+            }
+
+            $complaint->actiontaken_remarks = $request->get('action_taken_remarks');
+            $complaint->complaint_status = $request->get('complaint_status');
+            $complaint->division_id = $request->get('division_id');
+            $complaint->dept_user_id = $dept_user_id;
+            $complaint->actiontaken_report = $fileNameToStore;
+            $complaint->save();
+            return response()->json(['success', 'Complaint Status Updated Successfully']);
         }
     }
 }
