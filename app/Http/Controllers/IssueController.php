@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Issue;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class IssueController extends Controller
      */
     public function index()
     {
-        $issues = Issue::paginate();
+        $issues = Issue::orderBy('dept_id')->paginate(20);
         return view('issues.index', compact('issues'));
     }
 
@@ -25,7 +26,8 @@ class IssueController extends Controller
      */
     public function create()
     {
-        //
+        $departments = Department::all();
+        return view('issues.create', compact('departments'));
     }
 
     /**
@@ -36,8 +38,17 @@ class IssueController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        dd($request);
+        $this->validate($request, [
+            'issue_details' => 'required|string|max:255',
+            'department_id' => 'required',
+        ]);
+        $user = Issue::create([
+            'issue_details' => $request->issue_details,
+            'dept_id' => $request->department_id,
+            'priority' => 0
+        ]);
+
+        return redirect(route('issues.index'))->with('success', 'Issue Created Successfully');
     }
 
     /**
@@ -88,8 +99,10 @@ class IssueController extends Controller
      * @param  \App\Models\Issue  $issue
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Issue $issue)
+    public function destroy($id)
     {
-        //
+        $issue = Issue::find($id);
+        $issue->delete();
+        return back()->with("success", "Issue Deleted Successfully");
     }
 }
