@@ -43,13 +43,52 @@ class ApiResponseController extends Controller
     {
         return new ComplaintCollection(Complaint::all());
     }
+    //Get All Complaints
+    public function getAllPendingDeptComplaints(Request $request)
+    {
+        return new ComplaintCollection(Complaint::all()->where('dept_id', "=", $request->get("dept_id")));
+    }
 
-    //Get All Complaints by Dept Id
+
+    //Get All Pending Complaints
+    public function getAllPendingComplaints(Request $request)
+    {
+        return new ComplaintCollection(Complaint::all()->where("complaint_status", "=", "Pending"));
+    }
+
+
+    //Get All Forwarded Complaints
+    public function getAllForwardedComplaints(Request $request)
+    {
+        return new ComplaintCollection(Complaint::all()->where("complaint_status", "=", "Forwarded"));
+    }
+
+    //Get All Forwarded  dept Complaints
+    public function getallforwardeddeptcomplaints(Request $request)
+    {
+        return new ComplaintCollection(Complaint::all()->where("complaint_status", "=", "Forwarded")->where('dept_id', '=', $request->get("dept_id")));
+    }
+
+    //Get All Closed Complaints
+    public function getAllClosedComplaints(Request $request)
+    {
+        return new ComplaintCollection(Complaint::all()->where("complaint_status", "=", "Closed"));
+    }
+
+    //Get All Closed Dept Complaints
+    public function getAllClosedDeptComplaints(Request $request)
+    {
+        return new ComplaintCollection(Complaint::all()->where("complaint_status", "=", "Closed")->where('dept_id', '=', $request->get("dept_id")));
+    }
+
+    //Get All Pending Complaints by Dept Id
     public function getAllDeptComplaints(Request $request)
     {
         $dept_id = $request->deptid;
         return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('complaint_status', "=", "Pending")->get());
     }
+
+
 
     //Get All Complaints by User Id
     public function getAllUserComplaints(Request $request)
@@ -213,5 +252,15 @@ class ApiResponseController extends Controller
             $complaint->save();
             return response()->json(['success', 'Complaint Status Updated Successfully']);
         }
+    }
+    function getAppUsers()
+    {
+        $users = User::where("role", "=", "user")->get();
+        return response()->json(["data" => $users]);
+    }
+    function getDeptUsers()
+    {
+        $users = User::where("role", "=", "dist_user")->orWhere("role", "=", "div_user")->get();
+        return response()->json(["data" => $users]);
     }
 }

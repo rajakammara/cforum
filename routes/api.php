@@ -32,6 +32,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //To Get Dashboard Stats
     Route::post('/getDashboardStats', [ApiResponseController::class, 'getDashboardStats']);
 
+    //To Get All App Users
+    Route::get('/getAppUsers', [ApiResponseController::class, 'getAppUsers']);
+
+    //To Get All Dept Users
+    Route::get('/getDeptUsers', [ApiResponseController::class, 'getDeptUsers']);
+
     // To Get All departments
     Route::get('/departments', [ApiResponseController::class, 'getAllDepartments']);
 
@@ -46,6 +52,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // get all complaints
     Route::get("/getallcomplaints", [ApiResponseController::class, 'getAllComplaints']);
+
+    // get all pending complaints
+    Route::get("/getallpendingcomplaints", [ApiResponseController::class, 'getAllPendingComplaints']);
+
+    // get all pending Dept complaints
+    Route::post("/getallpendingdeptcomplaints", [ApiResponseController::class, 'getAllPendingDeptComplaints']);
+
+    // get all forwarded complaints
+    Route::get("/getallforwardedcomplaints", [ApiResponseController::class, 'getAllForwardedComplaints']);
+
+    // get all forwarded Dept complaints
+    Route::post("/getallforwardeddeptcomplaints", [ApiResponseController::class, 'getAllForwardeddeptComplaints']);
+
+    // get all closed complaints
+    Route::get("/getallclosedcomplaints", [ApiResponseController::class, 'getAllClosedComplaints']);
+
+    // get all closed dept complaints
+    Route::post("/getallcloseddeptcomplaints", [ApiResponseController::class, 'getAllClosedDeptComplaints']);
 
     // Get All complaints by department id
     Route::post("/getdeptcomplaints", [ApiResponseController::class, 'getAllDeptComplaints']);
