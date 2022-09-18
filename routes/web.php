@@ -23,6 +23,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/privacy_policy', function () {
+    return view('privacy');
+});
+Route::get('/terms_conditions', function () {
+    return view('terms');
+});
+
 // Protected Routes
 Route::middleware(['auth', 'auth:sanctum'])->group(
     function () {
