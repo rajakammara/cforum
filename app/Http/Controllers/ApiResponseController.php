@@ -88,6 +88,13 @@ class ApiResponseController extends Controller
         return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('complaint_status', "=", "Pending")->get());
     }
 
+   //Get All Pending Complaints by Dept Id and Division Id
+    public function getAllDivisionComplaints(Request $request)
+    {
+        $dept_id = $request->deptid;
+        $division_id = $request->divisionid;
+        return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('division_id',"=",$division_id)->where('complaint_status', "=", "Forwarded")->get());
+    }
 
 
     //Get All Complaints by User Id
