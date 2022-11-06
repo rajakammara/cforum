@@ -11,6 +11,7 @@ class Complaint extends Model
 
     protected $guarded = [];
     protected $appends = ['complaint_id'];
+    protected $fillable = ['mandal_id','village_id'];
     public function user()
     {
         return $this->hasOne(User::class, "id", "user_id");

@@ -97,6 +97,8 @@ class ComplaintController extends Controller
         //$complaint->user_feedback = $request->get('user_feedback');
         $complaint->latitude = $request->get('latitude');
         $complaint->longitude = $request->get('longitude');
+        $complaint->mandal_id = $request->get('mandal_id');
+        $complaint->village_id = $request->get('village_id');
         $complaint->dept_user_id = $distofficer->id;
         $complaint->save();
 

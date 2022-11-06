@@ -38,6 +38,7 @@ class ApiAuthController extends Controller
             'password' => Hash::make($request->password),
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+            'mandal' => $request->mandal,
             'role' => 'user'
         ]);
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -61,6 +62,7 @@ class ApiAuthController extends Controller
             'division_id' => $division_id,
             'latitude' => $user->latitude,
             'longitude' => $user->longitude,
+            'mandal' => $user->mandal,
         ]);
     }
 

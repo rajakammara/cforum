@@ -4,8 +4,12 @@ use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiResponseController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\MandalMasterController;
+use App\Http\Controllers\VillageMasterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use App\Models\VillageMaster;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,4 +96,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('fetchDivisions', [DivisionController::class, 'fetchDivisions']);
     // Fetch user divisions
     Route::post('fetchUserDivisions', [DivisionController::class, 'fetch_user_Divisions']);
+
+    // Fetch divisions
+    Route::post('fetchMandals', [MandalMasterController::class, 'fetchMandals']);
+    // Fetch user divisions
+    Route::post('fetchVillages', [VillageMasterController::class, 'fetchVillages']);
+
+});
+Route::get('fetchMandals', [MandalMasterController::class, 'fetchMandals']);
+Route::get('fetchVillages', function(Request $request){
+    $id = $request->query("id");
+    $data['villages'] = VillageMaster::where('mandal_id', '=', $id)->get();
+    return response()->json($data,200, [], JSON_UNESCAPED_UNICODE);
 });
