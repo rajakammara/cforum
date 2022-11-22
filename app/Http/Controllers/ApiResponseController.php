@@ -84,18 +84,18 @@ class ApiResponseController extends Controller
     //Get All Pending Complaints by Dept Id get username
     public function getAllDeptComplaints(Request $request)
     {
-        
-        
+
+
         $dept_id = $request->deptid;
         return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('complaint_status', "=", "Pending")->get());
     }
 
-   //Get All Pending Complaints by Dept Id and Division Id
+    //Get All Pending Complaints by Dept Id and Division Id
     public function getAllDivisionComplaints(Request $request)
     {
         $dept_id = $request->deptid;
         $division_id = $request->divisionid;
-        return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('division_id',"=",$division_id)->where('complaint_status', "=", "Forwarded")->get());
+        return new ComplaintCollection(Complaint::where('dept_id', $dept_id)->where('division_id', "=", $division_id)->where('complaint_status', "=", "Forwarded")->get());
     }
 
 
@@ -110,7 +110,7 @@ class ApiResponseController extends Controller
     public function getComplaint(Request $request)
     {
         $complaint_id = $request->cid;
-        $complaint = DB::select("select c.*,i.issue_details,u.name,u.mobile_no,u.email,d.department_name from complaints c inner join issues i on c.issue_id=i.id inner join users u on c.user_id=u.id inner join departments d on c.dept_id = d.id where c.id = ?", [$complaint_id]);
+        $complaint = DB::select("select c.*,i.issue_details,u.name,u.mobile_no,u.email,d.department_name,m.mandal_name,m.mandal_name_te,v.village_name,v.village_name_te from complaints c inner join issues i on c.issue_id=i.id inner join users u on c.user_id=u.id inner join departments d on c.dept_id = d.id inner join mandal_masters m on c.mandal_id=m.id inner join village_masters v on c.village_id=v.id where c.id =?", [$complaint_id]);
         return response()->json(["data" => $complaint]);
         //return new ComplaintCollection(Complaint::where('id', $complaint_id)->get());
     }
