@@ -282,7 +282,7 @@ class ApiResponseController extends Controller
         return response()->json(["data" => $users]);
     }
     
-    function getDivisionClosedComplaints(){
+    function getDivisionClosedComplaints(Request $request){
       $user_id = $request->userid;
       $user = User::findOrFail($user_id);
       //$dept_id = $request->dept_id;     
