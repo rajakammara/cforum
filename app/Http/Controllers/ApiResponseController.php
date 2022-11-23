@@ -199,6 +199,7 @@ class ApiResponseController extends Controller
                 'pendingComplaints' => $pendingComplaints,
                 'forwardedComplaints' => $forwardedComplaints,
                 'closedComplaints' => $closedComplaints,
+                'totalResolvedComplaints' => $resolvedComplaints,
                 'totalDepartments' => $departments,
                 'totalUsers' => $totalUsers,
                 'totalDeptUsers' => $totalDeptUsers,
