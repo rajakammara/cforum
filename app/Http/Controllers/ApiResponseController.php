@@ -185,7 +185,7 @@ class ApiResponseController extends Controller
             $totalComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user_deptId)->where('division_id', '=', $user_divisionId)->count('id');
             $pendingComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user_deptId)->where('division_id', '=', $user_divisionId)->where('complaint_status', '=', 'Pending')->count('id');
             $forwardedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user_deptId)->where('division_id', '=', $user_divisionId)->where('complaint_status', '=', 'Forwarded')->count('id');
-            $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Resolved')->where('division_id', '=', $user_divisionId)->where('dept_id', '=', $user_deptId)->count('id');
+            $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user_deptId)->where('division_id', '=', $user_divisionId)->where('complaint_status', '=', 'Resolved')->count('id');
             $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user_divisionId)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user_deptId)->count('id');
 
             $departments = Department::where('id', '=', $user_deptId)->count();
