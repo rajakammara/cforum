@@ -289,7 +289,8 @@ class ApiResponseController extends Controller
       
       $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->get();
       
-      return new ComplaintCollection($closedComplaints);
+       return response()->json(["data" => $closedComplaints]);
+      
     
     }
 }
