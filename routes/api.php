@@ -75,6 +75,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // get all closed dept complaints
     Route::post("/getallcloseddeptcomplaints", [ApiResponseController::class, 'getAllClosedDeptComplaints']);
+    
+    // get all Division closed dept complaints
+    Route::post("/getDivisioncloseddeptcomplaints", [ApiResponseController::class, 'getDivisionClosedComplaints']);
 
     // Get All Pending complaints by department id
     Route::post("/getdeptcomplaints", [ApiResponseController::class, 'getPendingDeptComplaints']);

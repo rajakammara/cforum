@@ -281,4 +281,12 @@ class ApiResponseController extends Controller
         $users = User::where("role", "=", "dist_user")->orWhere("role", "=", "div_user")->get();
         return response()->json(["data" => $users]);
     }
+    
+    function getDivisionClosedComplaints(){
+      $user = Auth::user();
+      $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->get();
+      
+      return new ComplaintCollection($closedComplaints);
+    
+    }
 }
