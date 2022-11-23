@@ -137,7 +137,7 @@ class ApiResponseController extends Controller
             $pendingComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Pending')->count('id');
             $forwardedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Forwarded')->count('id');
             $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Resolved')->count('id');
-            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Closed')->count('id');
+            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Closed')->orWhere('complaint_status', '=', 'Resolved')->count('id');
 
             $departments = Department::count();
             $totalDeptUsers = User::where('role', '=', 'dist_user')->orWhere('role', '=', 'div_user')->count();
