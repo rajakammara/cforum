@@ -283,7 +283,10 @@ class ApiResponseController extends Controller
     }
     
     function getDivisionClosedComplaints(){
-      $user = Auth::user();
+      $user_id = $request->userid;
+      $user = User::findOrFail($user_id);
+      //$dept_id = $request->dept_id;     
+      
       $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->get();
       
       return new ComplaintCollection($closedComplaints);
