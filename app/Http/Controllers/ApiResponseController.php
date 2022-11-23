@@ -284,10 +284,11 @@ class ApiResponseController extends Controller
     
     function getDivisionClosedComplaints(Request $request){
       $user_id = $request->userid;
-      $user = User::findOrFail($user_id);
-      //$dept_id = $request->dept_id;     
+      $dept_id = $request->deptid; 
+   
+          
       
-      $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->get();
+      $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_user_id', '=', $user_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $dept_id)->get();
       
        return response()->json(["data" => $closedComplaints]);
       
