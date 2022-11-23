@@ -74,7 +74,7 @@ class DashboardController extends Controller
             $pendingComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Pending')->count('id');
             $forwardedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('dept_id', '=', $user->dept_id)->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Forwarded')->count('id');
             $resolvedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('complaint_status', '=', 'Resolved')->where('division_id', '=', $user->division_id)->where('dept_id', '=', $user->dept_id)->count('id');
-            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->where('dept_id', '=', $user->dept_id)->count('id');
+            $closedComplaints = \App\Models\Complaint::with(['user', 'issue', 'department'])->where('division_id', '=', $user->division_id)->where('complaint_status', '=', 'Closed')->orWhere('complaint_status', '=', 'Resolved')->where('dept_id', '=', $user->dept_id)->count('id');
 
             $departments = Department::where('id', '=', $user->dept_id)->count();
             $totalDeptUsers = User::where('role', '=', 'dist_user')->where('dept_id', '=', $user->dept_id)->orWhere('role', '=', 'div_user')->count();
