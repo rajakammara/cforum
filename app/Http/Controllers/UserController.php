@@ -60,6 +60,10 @@ class UserController extends Controller
             'can_forward_issue' => true,
             'can_close_issue' => true,
             'is_deptuser' => true,
+            'longitude' => '',
+            'latitude' => '',
+            'mandal_id' => 1,
+            'village_id'=>260,
             'password' => Hash::make('12345678'),
         ]);
 
